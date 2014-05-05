@@ -15,6 +15,13 @@ public class ShowCart implements Application {
     }
 
     public void handle(Request request, Response response) throws Exception {
-        view.render(response, SessionScope.cart(request));
+        if (SessionScope.cart(request).empty())
+        {
+            response.redirectTo("/");
+        }
+        else
+        {
+            view.render(response, SessionScope.cart(request));
+        }
     }
 }
