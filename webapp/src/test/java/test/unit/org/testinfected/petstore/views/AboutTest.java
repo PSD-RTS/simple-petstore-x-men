@@ -44,7 +44,7 @@ public class AboutTest {
 		// load page html
 		page = renderAboutPage().asDom();
 
-		// counter size of items in dom and check if it is equal to the team
+		// counter size of items in dom and check if it is equal to the team (for description)
 		// size
 		assertThat("cart page", page,
 				hasSelector("#dev ul .description", hasSize(TEAM_SIZE)));
@@ -55,7 +55,7 @@ public class AboutTest {
 		// load page html
 		page = renderAboutPage().asDom();
 
-		// counter size of items in dom and check if it is equal to the team
+		// counter size of items in dom and check if it is equal to the team (for images)
 		// size
 		assertThat("cart page", page,
 				hasSelector("#dev ul li img", hasSize(TEAM_SIZE)));
