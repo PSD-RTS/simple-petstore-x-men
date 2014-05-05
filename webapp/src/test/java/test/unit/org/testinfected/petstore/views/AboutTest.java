@@ -14,24 +14,51 @@ import test.support.org.testinfected.petstore.web.OfflineRenderer;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
 public class AboutTest {
-	String ABOUT_TEMPLATE = "about";
-
+	final static String ABOUT_TEMPLATE = "about";
+	final static int TEAM_SIZE = 6;
 	Element page;
 
 	@Test
 	public void aboutPageHasTitleAbout() {
+		// load page html
 		page = renderAboutPage().asDom();
 
+		// do assert on h1 tag and check if value is equal to "About"
 		assertThat("cart page", page, hasUniqueSelector("h1", hasText("About")));
 
-		
 	}
-	
+
 	@Test
-	public void haveListOfDevInPage(){
+	public void haveListOfDevsInPage() {
+		// load page html
 		page = renderAboutPage().asDom();
 
-		assertThat("cart page", page, hasSelector("#dev ul li", hasSize(6)));
+		// counter size of items in dom and check if it is equal to the team
+		// size
+		assertThat("cart page", page,
+				hasSelector("#dev ul li", hasSize(TEAM_SIZE)));
+
+	}
+	@Test
+	public void haveListOfDevsDescriptionInPage() {
+		// load page html
+		page = renderAboutPage().asDom();
+
+		// counter size of items in dom and check if it is equal to the team
+		// size
+		assertThat("cart page", page,
+				hasSelector("#dev ul .description", hasSize(TEAM_SIZE)));
+
+	}
+	@Test
+	public void haveListOfDevsImageInPage() {
+		// load page html
+		page = renderAboutPage().asDom();
+
+		// counter size of items in dom and check if it is equal to the team
+		// size
+		assertThat("cart page", page,
+				hasSelector("#dev ul li img", hasSize(TEAM_SIZE)));
 
 	}
 
