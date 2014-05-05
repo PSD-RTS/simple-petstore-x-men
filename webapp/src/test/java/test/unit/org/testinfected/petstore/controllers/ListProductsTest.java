@@ -18,6 +18,7 @@ import test.support.org.testinfected.petstore.builders.Builder;
 import test.support.org.testinfected.petstore.web.MockView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -60,6 +61,16 @@ public class ListProductsTest {
         view.assertRenderedWith(productsFound(searchResults));
         view.assertRenderedWith(searchKeyword(keyword));
         view.assertRenderedWith(photosIn(photoLibrary));
+    }
+
+    @Test
+    public void rendersNoProductsMatchingEmptyKeyword() throws Exception {
+        request.addParameter("keyword", "  ");
+        context.checking(new Expectations() {{
+            never(productCatalog).findByKeyword(keyword);
+        }});
+        listProducts.handle(request, response);
+        view.assertRenderedWith(productsFound(searchResults));
     }
 
     private Matcher<Object> photosIn(AttachmentStorage photos) {
