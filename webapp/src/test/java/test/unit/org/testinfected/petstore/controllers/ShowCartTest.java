@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.testinfected.petstore.controllers.ShowCart;
 import org.testinfected.petstore.order.Cart;
+import org.testinfected.petstore.product.Item;
 import test.support.org.testinfected.petstore.web.MockView;
 
 import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
@@ -37,6 +38,16 @@ public class ShowCartTest {
         view.assertRenderedTo(response);
         view.assertRenderedWith(sameCartAs(cart));
     }
+
+    @Test
+    public void cartIsNotDisplayedWhenEmpty() throws Exception {
+        final Cart cart = aCart().build();
+        storeInSession(cart);
+
+        showCart.handle(request, response);
+        response.assertRedirectedTo("/");
+    }
+
 
     private Matcher<Object> sameCartAs(Cart cart) {
         return Matchers.<Object>sameInstance(cart);
