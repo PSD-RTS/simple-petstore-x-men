@@ -1,8 +1,12 @@
 package test.unit.org.testinfected.petstore.billing;
 
 import org.junit.Test;
+import org.testinfected.petstore.billing.CreditCardDetails;
+import org.testinfected.petstore.billing.CreditCardType;
+import test.support.org.testinfected.petstore.builders.CreditCardBuilder;
 
 import static org.hamcrest.CoreMatchers.describedAs;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static test.support.org.testinfected.petstore.builders.AddressBuilder.anAddress;
@@ -21,30 +25,45 @@ public class CreditCardDetailsTest {
     String EMPTY = "";
     String INCORRECT = "1234567890123456";
 
-    @Test public void
+
+    @Test
+    public void
     areSerializable() {
         assertThat("card details", validCreditCardDetails().build(), describedAs("are serializable", serializedForm(notNullValue())));
     }
 
-    @Test public void
+    @Test
+    public void
     areInvalidWithAnEmptyOrIncorrectCardNumber() {
         assertThat("empty number", validationOf(aVisa().withNumber(EMPTY)), violates(on("cardNumber"), withMessage("empty")));
         assertThat("incorrect number", validationOf(aVisa().withNumber(INCORRECT)), violates(on("cardNumber"), withMessage("incorrect")));
     }
 
-    @Test public void
+    @Test
+    public void
     areInvalidWithoutACardExpiryDate() {
         assertThat("missing expiry date", validationOf(aVisa().withExpiryDate(MISSING)), violates(on("cardExpiryDate"), withMessage("missing")));
     }
 
-    @Test public void
+    @Test
+    public void
     areInvalidWithAnInvalidAddress() {
         assertThat("missing first name", validationOf(aVisa().billedTo(anAddress().withFirstName(MISSING))), violates(on("billingAddress.firstName"), withMessage("missing")));
         assertThat("missing last name", validationOf(aVisa().billedTo(anAddress().withLastName(MISSING))), violates(on("billingAddress.lastName"), withMessage("missing")));
         assertThat("invalid address", validationOf(aVisa().billedTo(anAddress().withFirstName(MISSING))), violates(on("billingAddress"), withMessage("invalid")));
     }
 
-    @Test public void
+    @Test
+    public void
+    cardNumberIsHiddenOnReceipt() {
+
+        CreditCardDetails creditCard = CreditCardBuilder.aVisa().withNumber("4532882270543952").build();
+
+        assertThat("Hidden number ", creditCard.getHiddenCardNumber(), equalTo("XXXX-XXXX-XXXX-3952"));
+    }
+
+    @Test
+    public void
     areValidWithAllRequiredDetails() {
         assertThat("valid card", validationOf(validCreditCardDetails()), succeeds());
     }

@@ -92,10 +92,10 @@ public class OrderPageTest {
     @Test public void
     displaysPaymentDetails() {
         orderPage = renderOrderPage().with(order.paidWith(
-                aVisa().withNumber("9999 9999 9999").withExpiryDate("12/12"))).asDom();
+                aVisa().withNumber("4532882270543952").withExpiryDate("12/12"))).asDom();
         assertThat("order page", orderPage, hasSelector("#payment-details span", matchesInAnyOrder(
                 hasText("Visa"),
-                hasText("9999 9999 9999"),
+                hasText("XXXX-XXXX-XXXX-3952"),
                 hasText("12/12"))));
     }
 
@@ -104,6 +104,7 @@ public class OrderPageTest {
         orderPage = renderOrderPage().with(order).asDom();
         assertThat("order page", orderPage, hasUniqueSelector("a.cancel", hasAttribute("href", "/")));
     }
+
 
     private Matcher<Element> hasOrderNumber(final String orderNumber) {
         return hasUniqueSelector("span#order-number", hasText(orderNumber));
