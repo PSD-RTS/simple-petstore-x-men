@@ -40,6 +40,18 @@ public class ShowOrderTest {
         view.assertRenderedWith(sameOrderAs(order));
     }
 
+    @Test
+    public void redirectToHomeWhenInvalidOrder() throws Exception {
+        request.addParameter("number", "000000101");
+
+        context.checking(new Expectations() {{
+            allowing(orderBook).find(new OrderNumber("000000101")); will(returnValue(null));
+        }});
+
+        showOrder.handle(request, response);
+        response.assertRedirectedTo("/");
+    }
+
     private Matcher<Object> sameOrderAs(Order order) {
         return Matchers.<Object>sameInstance(order);
     }

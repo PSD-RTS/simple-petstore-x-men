@@ -57,7 +57,7 @@ body.petstore {
 #header ul {
 	position: absolute;
 	top: 73px;
-	left: 740px;
+	left: 700px;
 }
 
 #header ul li {
@@ -118,11 +118,11 @@ body.petstore {
 	padding-top: 2px;
 }
 
-#home.overline, #shopping-cart.overline.cart {
+#home.overline, #shopping-cart.overline.cart, #about.overline.about {
 	border-top: solid #c6ee22 2px;
 }
 
-#home.overline.cart, #shopping-cart.overline {
+#home.overline.cart, #home.overline.about, #shopping-cart.overline, #about.overline {
 	border-top: none;
 }
 
