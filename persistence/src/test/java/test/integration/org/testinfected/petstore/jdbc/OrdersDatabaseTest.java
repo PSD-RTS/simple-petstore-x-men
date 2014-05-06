@@ -2,6 +2,7 @@ package test.integration.org.testinfected.petstore.jdbc;
 
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -63,6 +64,13 @@ public class OrdersDatabaseTest {
 
         Order match = orderDatabase.find(new OrderNumber("00000100"));
         assertThat("match", match, orderWithNumber("00000100"));
+    }
+
+    @Test public void
+    returnsNullWhenOrderNumberIsUnknown () throws Exception {
+        String unknownNumber = "00000101";
+        Order match = orderDatabase.find(new OrderNumber(unknownNumber));
+        assertThat("order for unknown number", match, Matchers.nullValue());
     }
 
     @SuppressWarnings("unchecked")
