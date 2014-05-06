@@ -81,6 +81,8 @@ public class OrderTest {
         assertTrue("not paid", order.isPaid());
     }
 
+
+
     private Cart aCartWithSomeItemsAddedMultipleTimes() {
         Cart cart = aCart().build();
         String[] itemNumbers = { "11111111", "11111111", "22222222" };
