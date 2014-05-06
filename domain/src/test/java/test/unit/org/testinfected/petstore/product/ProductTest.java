@@ -9,6 +9,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
+import static test.support.org.testinfected.petstore.matchers.ValidationMatchers.*;
 
 public class ProductTest {
 
@@ -26,6 +27,16 @@ public class ProductTest {
         assertThat("hash code", product.hashCode(), equalTo(shouldMatch.hashCode()));
         assertThat("product", product, not(equalTo(shouldNotMatch)));
     }
+
+    @Test
+    public void
+    productIsInvalidWithAnEmptyNumber() {
+        assertThat("empty number", validationOf(aProduct().withNumber("")), violates(on("number"), withMessage("incorrect")));
+        assertThat("invalid number", validationOf(aProduct().withNumber("123123")), violates(on("number"), withMessage("incorrect")));
+        assertThat("valid number", validationOf(aProduct().withNumber("ADF-1234")), succeeds());
+
+    }
+
 
     private Product aProductWithoutAPhoto() {
         return aProduct().withoutAPhoto().build();

@@ -1,15 +1,14 @@
 package org.testinfected.petstore.procurement;
 
-import org.testinfected.petstore.product.Attachment;
-import org.testinfected.petstore.product.Item;
-import org.testinfected.petstore.product.ItemInventory;
-import org.testinfected.petstore.product.ItemNumber;
-import org.testinfected.petstore.product.Product;
-import org.testinfected.petstore.product.ProductCatalog;
+import org.testinfected.petstore.product.*;
 import org.testinfected.petstore.transaction.Transactor;
 import org.testinfected.petstore.transaction.UnitOfWork;
+import org.testinfected.petstore.validation.*;
 
+
+import javax.xml.ws.http.HTTPException;
 import java.math.BigDecimal;
+import java.util.Set;
 
 public class PurchasingAgent implements ProcurementRequestHandler {
     private final ProductCatalog productCatalog;
@@ -22,16 +21,31 @@ public class PurchasingAgent implements ProcurementRequestHandler {
         this.transactor = transactor;
     }
 
-    public void addProductToCatalog(String number, String name, String description, String photoFileName) throws Exception {
+    public void addProductToCatalog(String number, String name, String description, String photoFileName) throws Exception, InvalidProductDetailsException {
         final Product product = new Product(number, name);
+
         product.setDescription(description);
         product.attachPhoto(new Attachment(photoFileName));
 
-        transactor.perform(new UnitOfWork() {
-            public void execute() throws Exception {
-                productCatalog.add(product);
-            }
-        });
+        Validator validator = new Validator();
+
+        Set<ConstraintViolation<?>> violations = validator.validate(product);
+
+
+
+
+        if(!violations.isEmpty()){
+            throw new InvalidProductDetailsException();
+        } else {
+            transactor.perform(new UnitOfWork() {
+                public void execute() throws Exception {
+                    productCatalog.add(product);
+                }
+            });
+        }
+
+
+
     }
 
     public void addToInventory(String productNumber, String itemNumber, String description, BigDecimal price) throws Exception {

@@ -6,6 +6,7 @@ import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;
 import org.junit.Test;
 import org.testinfected.petstore.procurement.PurchasingAgent;
+import org.testinfected.petstore.product.InvalidProductDetailsException;
 import org.testinfected.petstore.product.ItemInventory;
 import org.testinfected.petstore.product.Product;
 import org.testinfected.petstore.product.ProductCatalog;
@@ -28,7 +29,7 @@ public class PurchasingAgentTest {
     PurchasingAgent purchasingAgent = new PurchasingAgent(productCatalog, itemInventory, new StubTransactor(transaction));
 
     @Test public void
-    addsNewProductToProductCatalog() throws Exception {
+    addsNewProductToProductCatalog() throws Exception, InvalidProductDetailsException {
         context.checking(new Expectations() {{
             oneOf(productCatalog).add(with(samePropertyValuesAs(
                     aProduct("LAB-1234").named("Labrador").
@@ -36,6 +37,11 @@ public class PurchasingAgentTest {
         }});
 
         purchasingAgent.addProductToCatalog("LAB-1234", "Labrador", "Friendly Dog", "Labrador.jpg");
+    }
+
+    @Test(expected = InvalidProductDetailsException.class) public void
+    invalidProductThrowsException() throws Exception, InvalidProductDetailsException {
+        purchasingAgent.addProductToCatalog("L-1234", "Labrador", "Friendly Dog", "Labrador.jpg");
     }
 
     @Test public void

@@ -1,11 +1,13 @@
 package org.testinfected.petstore.controllers;
 
+import com.vtence.molecule.HttpException;
 import org.testinfected.petstore.procurement.ProcurementRequestHandler;
 import org.testinfected.petstore.product.DuplicateProductException;
 import com.vtence.molecule.Application;
 import com.vtence.molecule.http.HttpStatus;
 import com.vtence.molecule.Request;
 import com.vtence.molecule.Response;
+import org.testinfected.petstore.product.InvalidProductDetailsException;
 
 public class CreateProduct implements Application {
 
@@ -25,6 +27,8 @@ public class CreateProduct implements Application {
             response.status(HttpStatus.CREATED);
         } catch (DuplicateProductException e) {
             response.status(HttpStatus.CONFLICT);
+        }  catch (InvalidProductDetailsException e) {
+            response.status(HttpStatus.BAD_REQUEST);
         }
     }
 }

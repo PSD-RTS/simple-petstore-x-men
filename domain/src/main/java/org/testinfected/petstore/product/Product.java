@@ -1,5 +1,8 @@
 package org.testinfected.petstore.product;
 
+import org.testinfected.petstore.validation.Constraint;
+import org.testinfected.petstore.validation.Validates;
+
 import java.io.Serializable;
 
 public class Product implements Serializable {
@@ -9,19 +12,19 @@ public class Product implements Serializable {
     @SuppressWarnings("unused")
 	private long id;
 
-    private final String number;
+    private final Constraint<String> number;
     private final String name;
 
     private String description;
     private Attachment photo;
 
     public Product(String number, String name) {
-        this.number = number;
+        this.number = Validates.correctnessOf(number);
 		this.name = name;
 	}
 
     public String getNumber() {
-		return number;
+		return number.get();
 	}
 
 	public String getName() {
@@ -55,14 +58,15 @@ public class Product implements Serializable {
 
         Product product = (Product) o;
 
-        if (number != null ? !number.equals(product.number) : product.number != null) return false;
+        if (number != null ? !number.get().equals(product.number.get()) : product.number != null) return false;
+
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return number != null ? number.hashCode() : 0;
+        return number != null ? number.get().hashCode() : 0;
     }
 
     @Override
