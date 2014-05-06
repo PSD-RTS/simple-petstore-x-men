@@ -85,6 +85,12 @@ public class HeaderTest {
                 hasUniqueSelector("#tab.cart", hasChild(allOf(hasTag("img"), hasAttribute("src", "/images/tab.png"))))));
     }
 
+    @Test
+    public void isAboutLinkPresent() {
+        header = renderHeader().with(page).asDom();
+        assertThat("header should have an about link", header, hasUniqueSelector("#about a", hasAttribute("href", "/about")));
+    }
+
     @SuppressWarnings("unchecked")
     private Matcher<Element> keywordInputField() {
         return anElement(hasTag("input"), hasId("keyword"), hasAttribute("type", "text"), hasAttribute("name", "keyword"));
