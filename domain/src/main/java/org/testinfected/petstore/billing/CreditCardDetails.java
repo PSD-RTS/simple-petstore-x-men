@@ -14,7 +14,7 @@ public class CreditCardDetails extends PaymentMethod implements Serializable {
     private final String hiddenCardNumber;
     private final NotNull<String> cardExpiryDate;
     private final Valid<Address> billingAddress;
-    static public final String HIDDEN_PART = "XXXX-XXXX-XXXX-";
+    static private final String HIDDEN_PART = "XXXX-XXXX-XXXX-";
 
     public CreditCardDetails(CreditCardType cardType, String cardNumber, String cardExpiryDate, Address billingAddress) {
         this.cardType = cardType;

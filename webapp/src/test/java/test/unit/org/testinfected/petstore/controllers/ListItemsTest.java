@@ -19,8 +19,11 @@ import test.support.org.testinfected.petstore.web.MockView;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertTrue;
 import static test.support.org.testinfected.petstore.builders.Builders.build;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
@@ -46,6 +49,27 @@ public class ListItemsTest {
     @After public void
     assertPageRendered() {
         view.assertRenderedTo(response);
+    }
+
+    @Test
+    public void validateProductNumberFormat() throws Exception {
+        searchYields(anItem().of(aProduct().withNumber(productNumber)));
+        assertThat("wrong product number format", request.parameter("product").matches("[A-Z]{3}-[0-9]{4}"));
+
+        listItems.handle(request, response);
+        view.assertRenderedWith(availableItems(items));
+    }
+
+    @Test
+    public void displayNoItemsWhenWrongProductNumberFormat() throws Exception {
+        request.addParameter("product", "70080944");
+
+        context.checking(new Expectations() {{
+            never(itemInventory).findByProductNumber(productNumber);
+        }});
+
+        listItems.handle(request, response);
+        view.assertRenderedWith(availableItems(items));
     }
 
     @SuppressWarnings("unchecked")

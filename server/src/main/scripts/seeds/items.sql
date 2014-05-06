@@ -4,9 +4,9 @@ TRUNCATE products;
 SET FOREIGN_KEY_CHECKS = 1;
 
 INSERT INTO `products` (`id`, `name`, `description`, `photo_file_name`, `number`) VALUES
-(21, 'Reptiles', 'Cold-blooded friends', 'iguana.png', '60090989'),
-(22, 'Labrador Retriever', 'Your best friend', 'dog.png', '70080944'),
-(23, 'Husky', 'Perfect winter jogging partner', 'husky.jpg', '45454545');
+(21, 'Reptiles', 'Cold-blooded friends', 'iguana.png', 'ABC-0989'),
+(22, 'Labrador Retriever', 'Your best friend', 'dog.png', 'DEF-0944'),
+(23, 'Husky', 'Perfect winter jogging partner', 'husky.jpg', 'HIJ-4545');
 
 INSERT INTO `items` (`id`, `number`, `product_id`, `description`, `price`) VALUES
 (8, '12345678', 21, 'Green adult lizard', 18.50),
