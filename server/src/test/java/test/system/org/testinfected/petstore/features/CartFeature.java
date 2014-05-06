@@ -26,6 +26,7 @@ public class CartFeature {
 
     @Test public void
     shoppingForItemsAndAddingThemToOurCart() throws IOException {
+
         application.havingProductInCatalog("LIZ-0001", "Iguana", "Big lizard", "iguana.png");
         application.havingItemInStore("LIZ-0001", "12345678", "Green Adult", "18.50");
         application.havingItemInStore("LIZ-0001", "87654321", "Blue Female", "58.97");
