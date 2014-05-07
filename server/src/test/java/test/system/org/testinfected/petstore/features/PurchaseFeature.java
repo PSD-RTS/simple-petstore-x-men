@@ -36,12 +36,12 @@ public class PurchaseFeature {
         application.buyItem("Golden Retriever", "22222222");
         application.showsTotalToPay(totalPrice);
 
-        application.pay("John", "Doe", "jdoe@gmail.com", "Visa", "4111111111111111", "12/12");
+        application.pay("John", "Doe", "jdoe@gmail.com", "Switzerland", "Visa", "4111111111111111", "12/12");
         application.showsCartIsEmpty();
         application.showsOrderTotal("1248.00");
         application.showsOrderedItems(
                 item("11111111", "Male Adult", "599.00"), item("22222222", "Female Adult", "649.00"));
-        application.showsBillingInformation("John", "Doe", "jdoe@gmail.com");
+        application.showsBillingInformation("John", "Doe", "jdoe@gmail.com", "Switzerland");
         application.showsCreditCardDetails("Visa", "XXXX-XXXX-XXXX-1111", "12/12");
     }
 

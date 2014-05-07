@@ -104,7 +104,8 @@ public class PlaceOrderTest {
                 hasProperty("cardExpiryDate", equalTo(payment.getCardExpiryDate())),
                 hasProperty("firstName", equalTo(payment.getFirstName())),
                 hasProperty("lastName", equalTo(payment.getLastName())),
-                hasProperty("email", equalTo(payment.getEmail())));
+                hasProperty("email", equalTo(payment.getEmail())),
+                hasProperty("country", equalTo(payment.getCountry())));
     }
 
     private Matcher<Object> billWithErrors(Matcher<? super ErrorMessages>... messages) {
@@ -128,6 +129,7 @@ public class PlaceOrderTest {
         request.addParameter("first-name", paymentDetails.getFirstName());
         request.addParameter("last-name", paymentDetails.getLastName());
         request.addParameter("email", paymentDetails.getEmail());
+        request.addParameter("country", paymentDetails.getCountry());
         request.addParameter("card-number", paymentDetails.getCardNumber());
         request.addParameter("card-type", paymentDetails.getCardType().toString());
         request.addParameter("expiry-date", paymentDetails.getCardExpiryDate());

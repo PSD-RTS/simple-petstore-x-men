@@ -17,10 +17,10 @@ public class Ordering {
         petstore.goToCartPage().checkout().showsTotalToPay(amount).continueShopping();
     }
 
-    public void confirm(String firstName, String lastName, String email, String cardType, String cardNumber, String cardExpiryDate) {
+    public void confirm(String firstName, String lastName, String email, String country, String cardType, String cardNumber, String cardExpiryDate) {
         CheckoutPage checkoutPage = petstore.goToCartPage().checkout();
         ReceiptPage receiptPage = checkoutPage.
-                willBillTo(firstName, lastName, email).
+                willBillTo(firstName, lastName, email, country).
                 willPayUsingCreditCard(cardType, cardNumber, cardExpiryDate).
                 confirm();
         orderNumber = receiptPage.getOrderNumber();
@@ -41,7 +41,7 @@ public class Ordering {
         petstore.goToReceiptPage(orderNumber).showsCreditCardDetails(cardType, cardNumber, cardExpiryDate);
     }
 
-    public void isBilledTo(String firstName, String lastName, String emailAddress) {
-        petstore.goToReceiptPage(orderNumber).showsBillingInformation(firstName, lastName, emailAddress);
+    public void isBilledTo(String firstName, String lastName, String emailAddress, String country) {
+        petstore.goToReceiptPage(orderNumber).showsBillingInformation(firstName, lastName, emailAddress, country);
     }
 }

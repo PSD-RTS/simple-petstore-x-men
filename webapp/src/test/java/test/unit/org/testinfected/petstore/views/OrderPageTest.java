@@ -78,14 +78,18 @@ public class OrderPageTest {
     @SuppressWarnings("unchecked")
     @Test public void
     displaysBillingInformation() {
-        orderPage = renderOrderPage().with(
+        OfflineRenderer with = renderOrderPage().with(
                 order.paidWith(aVisa().billedTo(anAddress().
-                        withFirstName("John").withLastName("Doe").withEmail("jdoe@gmail.com"))))
+                        withFirstName("John").withLastName("Doe").withEmail("jdoe@gmail.com").withCountry("World")))
+        );
+        String s = with.asString();
+        orderPage = with
                 .asDom();
         assertThat("order page", orderPage, hasSelector("#billing-address span", matchesInAnyOrder(
                 hasText("John"),
                 hasText("Doe"),
-                hasText("jdoe@gmail.com"))));
+                hasText("jdoe@gmail.com"),
+                hasText("World"))));
     }
 
     @SuppressWarnings("unchecked")

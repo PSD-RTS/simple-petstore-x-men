@@ -14,6 +14,8 @@ import org.testinfected.petstore.order.Order;
 import org.testinfected.petstore.order.OrderNumber;
 import org.testinfected.petstore.transaction.QueryUnitOfWork;
 import org.testinfected.petstore.transaction.Transactor;
+import test.support.org.testinfected.petstore.builders.AddressBuilder;
+import test.support.org.testinfected.petstore.builders.CreditCardBuilder;
 import test.support.org.testinfected.petstore.builders.OrderBuilder;
 import test.support.org.testinfected.petstore.jdbc.Database;
 import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
@@ -34,8 +36,8 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.testinfected.petstore.db.Access.idOf;
+import static test.support.org.testinfected.petstore.builders.AddressBuilder.anAddress;
 import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
-import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validCreditCardDetails;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 import static test.support.org.testinfected.petstore.builders.OrderBuilder.anOrder;
 import static test.support.org.testinfected.petstore.jdbc.HasFieldWithValue.hasField;
@@ -82,7 +84,7 @@ public class OrdersDatabaseTest {
                         anItem().withNumber("00000100").priced("100.00"),
                         anItem().withNumber("00000100").priced("100.00"),
                         anItem().withNumber("00000111").describedAs("White lizard"))),
-                anOrder().paidWith(validCreditCardDetails())
+                anOrder().paidWith(CreditCardBuilder.aVisa().billedTo(anAddress().withCountry("Swiss")))
         );
 
         for (OrderBuilder order : sampleOrders) {

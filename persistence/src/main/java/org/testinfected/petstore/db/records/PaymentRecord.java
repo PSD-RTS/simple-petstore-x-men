@@ -25,6 +25,7 @@ public class PaymentRecord extends AbstractRecord<PaymentMethod> {
     private final Column<String> firstName = payments.STRING("billing_first_name");
     private final Column<String> lastName = payments.STRING("billing_last_name");
     private final Column<String> email = payments.STRING("billing_email");
+    private final Column<String> country = payments.STRING("billing_country");
 
     public static final String CREDIT_CARD = "credit_card";
 
@@ -38,7 +39,7 @@ public class PaymentRecord extends AbstractRecord<PaymentMethod> {
 
         CreditCardDetails creditCard = new CreditCardDetails(
                 CreditCardType.valueOf(cardType.get(rs)), cardNumber.get(rs), cardExpiryDate.get(rs),
-                new Address(firstName.get(rs), lastName.get(rs), email.get(rs))
+                new Address(firstName.get(rs), lastName.get(rs), email.get(rs), country.get(rs))
         );
         idOf(creditCard).set(id.get(rs));
         return creditCard;
@@ -51,6 +52,7 @@ public class PaymentRecord extends AbstractRecord<PaymentMethod> {
         firstName.set(st, creditCard.getFirstName());
         lastName.set(st, creditCard.getLastName());
         email.set(st, creditCard.getEmail());
+        country.set(st, creditCard.getCountry());
         cardType.set(st, creditCard.getCardType().name());
         cardNumber.set(st, creditCard.getCardNumber());
         cardExpiryDate.set(st, creditCard.getCardExpiryDate());

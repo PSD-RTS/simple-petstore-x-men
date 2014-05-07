@@ -38,10 +38,11 @@ public class ReceiptPage extends Page {
         browser.element(cssSelector("#card-expiry span")).assertText(being(cardExpiryDate));
     }
 
-    public void showsBillingInformation(String firstName, String lastName, String emailAddress) {
+    public void showsBillingInformation(String firstName, String lastName, String emailAddress, String country) {
         browser.element(cssSelector("#first-name span")).assertText(being(firstName));
         browser.element(cssSelector("#last-name span")).assertText(being(lastName));
         browser.element(cssSelector("#email span")).assertText(being(emailAddress));
+        browser.element(cssSelector("#country span")).assertText(being(country));
     }
 
     public void continueShopping() {
