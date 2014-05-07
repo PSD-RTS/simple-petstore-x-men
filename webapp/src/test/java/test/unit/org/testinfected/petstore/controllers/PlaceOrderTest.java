@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.testinfected.petstore.Messages;
+import org.testinfected.petstore.billing.Address;
 import org.testinfected.petstore.billing.CreditCardDetails;
 import org.testinfected.petstore.billing.PaymentMethod;
 import org.testinfected.petstore.controllers.PlaceOrder;
@@ -25,11 +26,7 @@ import test.support.org.testinfected.petstore.web.MockView;
 import java.math.BigDecimal;
 import java.util.ResourceBundle;
 
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.samePropertyValuesAs;
+import static org.hamcrest.Matchers.*;
 import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
 import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validCreditCardDetails;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
@@ -71,7 +68,7 @@ public class PlaceOrderTest {
         response.assertRedirectedTo("/orders/" + orderNumber);
     }
 
-    @SuppressWarnings("unchecked") @Test public void
+    @Test public void
     rejectsOrderAndRendersBillWhenPaymentDetailsAreInvalid() throws Exception {
         final BigDecimal total = new BigDecimal("324.98");
         storeInSession(aCart().containing(anItem().priced(total)).build());
@@ -93,6 +90,29 @@ public class PlaceOrderTest {
                 message("paymentDetails.cardNumber", "may not be empty", "not a valid number")));
     }
 
+    @Test public void
+    rejectsOrderAndRendersBillWhenCountryIsInvalid() throws Exception {
+        final BigDecimal total = new BigDecimal("324.98");
+        storeInSession(aCart().containing(anItem().priced(total)).build());
+
+        context.checking(new Expectations() {{
+            never(salesAssistant).placeOrder(with(any(Cart.class)), with(any(PaymentMethod.class)));
+        }});
+
+        CreditCardDetails incompletePaymentDetails =
+                validCreditCardDetails().but().billedTo(new Address("first","last","email","")).build();
+        fillOutFormWith(incompletePaymentDetails);
+        placeOrder.handle(request, response);
+
+        view.assertRenderedTo(response);
+        view.assertRenderedWith(billWithTotal(total));
+        view.assertRenderedWith(billWithPayment(incompletePaymentDetails));
+        view.assertRenderedWith(billWithErrors(
+                message("paymentDetails", "Please correct the following errors:"),
+                message("paymentDetails.cardNumber", "may not be empty", "not a valid number")));
+    }
+
+
     private Matcher<Object> billWithTotal(BigDecimal amount) {
         return hasProperty("total", equalTo(amount));
     }
@@ -106,6 +126,11 @@ public class PlaceOrderTest {
                 hasProperty("lastName", equalTo(payment.getLastName())),
                 hasProperty("email", equalTo(payment.getEmail())),
                 hasProperty("country", equalTo(payment.getCountry())));
+    }
+
+    private Matcher<Object> detailWithCountry(CreditCardDetails payment) {
+        return allOf(
+                hasProperty("country", notNullValue()));
     }
 
     private Matcher<Object> billWithErrors(Matcher<? super ErrorMessages>... messages) {
