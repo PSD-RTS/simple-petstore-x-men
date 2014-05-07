@@ -11,6 +11,7 @@ import com.vtence.molecule.http.HttpStatus;
 import org.testinfected.petstore.controllers.CreateProduct;
 import org.testinfected.petstore.procurement.ProcurementRequestHandler;
 import org.testinfected.petstore.product.DuplicateProductException;
+import org.testinfected.petstore.product.InvalidProductDetailsException;
 
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
 
@@ -32,7 +33,7 @@ public class CreateProductTest {
     }
 
     @Test public void
-    makesProductProcurementRequestAndRespondsWithCreated() throws Exception {
+    makesProductProcurementRequestAndRespondsWithCreated() throws Exception, InvalidProductDetailsException {
         context.checking(new Expectations() {{
             oneOf(requestHandler).addProductToCatalog(with("LAB-1234"), with("Labrador"), with("Friendly Dog"), with("labrador.jpg"));
         }});
@@ -42,7 +43,7 @@ public class CreateProductTest {
     }
 
     @Test public void
-    reportsResourceConflictWhenProductAlreadyExists() throws Exception {
+    reportsResourceConflictWhenProductAlreadyExists() throws Exception, InvalidProductDetailsException {
         context.checking(new Expectations() {{
             oneOf(requestHandler).addProductToCatalog(with(any(String.class)), with(any(String.class)), with(any(String.class)), with(any(String.class))); will(throwException(new DuplicateProductException(aProduct().build())));
         }});
